@@ -96,11 +96,12 @@ def eden_7bc740_pocket(p3ec : int,*,trinket_pool_path : str|None=None,start_seed
         return Eden7bc740Pocket(kind='none',rng_after=v1)
     v150=eden_rng_step(v1)
     roll=eden_7e90f0_at_v150(v150)
+   
     if v150&1 :
         pid=roll_card_734900(roll)
-        return Eden7bc740Pocket(kind='card',rng_fn='734900',v150=v150,roll_seed=roll,pickup_id=pid,card_id=pid,grant_mode=0,rng_after=v150)
+        return Eden7bc740Pocket(kind='card',rng_fn='734900',v150=v150,roll_seed=roll,pickup_id=pid,card_id=pid,grant_mode=0,rng_after=roll)
     effect=roll_pill_734180(roll)
-    return Eden7bc740Pocket(kind='pill',rng_fn='734180',v150=v150,roll_seed=roll,pickup_id=effect,pill_effect=effect,grant_mode=1,rng_after=v150)
+    return Eden7bc740Pocket(kind='pill',rng_fn='734180',v150=v150,roll_seed=roll,pickup_id=effect,pill_effect=effect,grant_mode=1,rng_after=roll)
 
 def eden_pre_trinket_rng(v1 : int)-> int :
     return eden_7bc740_pocket(v1).rng_after 

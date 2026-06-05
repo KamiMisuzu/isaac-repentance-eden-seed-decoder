@@ -189,8 +189,8 @@ function applyReverseCriteria(c) {
   set("rev_luck", c.luck || "");
   set("rev_trinket_id", c.trinket_id || "");
   set("rev_pocket_id", c.pocket_id || "");
-  set("rev_active_id", c.passive_id || "");
-  set("rev_passive_id", c.active_id || "");
+  set("rev_passive_id", c.passive_id || "");
+  set("rev_active_id", c.active_id || "");
   document.getElementById("rev_ach_159").checked = c.ach_159 === "1";
   const pk = c.pocket_kind || "";
   const radio = document.querySelector(`input[name="pocket_kind"][value="${pk}"]`);
@@ -674,8 +674,8 @@ function pickReverseBody() {
     ["range", "rev_range"],
     ["shotSpeed", "rev_shotSpeed"],
     ["luck", "rev_luck"],
-    ["passive_id", "rev_active_id"],
-    ["active_id", "rev_passive_id"],
+    ["passive_id", "rev_passive_id"],
+    ["active_id", "rev_active_id"],
   ];
   for (const [key, id] of textFields) {
     const v = val(id);

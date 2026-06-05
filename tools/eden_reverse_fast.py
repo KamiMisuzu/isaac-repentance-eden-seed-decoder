@@ -201,7 +201,8 @@ def eden_pre_trinket_rng(p988: int) -> int:
     v1 = _eden_rng_step(v1)
     if v1 & 1:
         return v1
-    return _eden_rng_step(v1)
+    v150 = _eden_rng_step(v1)
+    return _eden_cfg_mix(v150)
 
 
 @njit(cache=True)
