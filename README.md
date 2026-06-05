@@ -34,6 +34,14 @@ pip install -e .
 pip install -e ".[fast]"
 ```
 
+**Windows 一键安装并启动 Web 界面**（双击或在仓库根目录运行）：
+
+```bat
+install_and_run.bat
+```
+
+脚本会自动：创建 `.venv` → 升级 pip → 安装 `[fast]` → 启动 `http://127.0.0.1:8765`。
+
 也可不安装，直接在仓库根目录运行：
 
 ```bash
