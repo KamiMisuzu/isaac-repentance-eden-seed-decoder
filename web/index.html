@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Eden</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="dungeon-bg" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="title-block">
+      <div class="header-row">
+        <h1 data-i18n="app.title">Eden</h1>
+        <div class="lang-switch">
+          <button type="button" class="lang-btn active" data-lang="zh">中文</button>
+          <button type="button" class="lang-btn" data-lang="en">EN</button>
+        </div>
+      </div>
+      <div class="mode-tabs">
+        <button type="button" class="mode-tab active" data-mode="predict" data-i18n="mode.predict">查种子</button>
+        <button type="button" class="mode-tab" data-mode="reverse" data-i18n="mode.reverse">反推</button>
+      </div>
+    </header>
+
+    <section class="data-panel" id="dataPanel">
+      <div class="data-head">
+        <span data-i18n="data.title">数据</span>
+        <button type="button" id="btnExtract" class="btn-extract" data-i18n="data.extract">提取</button>
+      </div>
+      <p class="data-path" id="dataPath">data/profiles/</p>
+      <p class="data-status" id="dataStatus"></p>
+      <p id="extractMsg" class="extract-msg hidden"></p>
+    </section>
+
+    <div id="predictPanel">
+      <form id="form" class="seed-bar">
+        <input id="seed" type="text" placeholder="XXXX XXXX" maxlength="9" autocomplete="off" spellcheck="false" title="I→1 O→0 U/5→V" />
+        <button type="submit" id="btn" data-i18n="seed.run">查</button>
+      </form>
+      <details class="calibrate">
+        <summary data-i18n="cal.title">校准</summary>
+        <div class="cal-grid">
+          <input id="p3ec" type="text" placeholder="p3ec" />
+          <label class="chk"><input id="ach_159" type="checkbox" /><span data-i18n="cal.ach159">ach 159</span></label>
+        </div>
+      </details>
+    </div>
+
+    <div id="reversePanel" class="hidden">
+      <form id="reverseForm" class="reverse-panel">
+        <p class="section-label" data-i18n="rev.prefixScan">前缀遍历</p>
+        <p class="section-hint" data-i18n="help.rev.prefixScanHint"></p>
+        <div class="rev-grid">
+          <label class="has-help">
+            <span class="label-row"><span data-i18n="rev.prefix">前缀</span><button type="button" class="help-btn" data-help="rev.prefix" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="rev.prefix"><p data-i18n="help.rev.prefix"></p><pre class="help-code hidden" data-help-code="rev.prefix"></pre></div>
+            <input id="rev_prefix" type="text" maxlength="9" />
+          </label>
+        </div>
+        <p class="section-label" data-i18n="rev.rangeScan">范围扫描</p>
+        <p class="section-hint" data-i18n="help.rev.rangeScanHint"></p>
+        <div class="rev-grid rev-range-grid" id="revRangeGrid">
+          <label class="has-help">
+            <span class="label-row"><span data-i18n="rev.start">起点</span><button type="button" class="help-btn" data-help="rev.start" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="rev.start"><p data-i18n="help.rev.start"></p><pre class="help-code hidden" data-help-code="rev.start"></pre></div>
+            <input id="rev_start" type="text" placeholder="0" />
+          </label>
+          <label class="has-help">
+            <span class="label-row"><span data-i18n="rev.end">终点</span><button type="button" class="help-btn" data-help="rev.end" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="rev.end"><p data-i18n="help.rev.end"></p><pre class="help-code hidden" data-help-code="rev.end"></pre></div>
+            <input id="rev_end" type="text" placeholder="ffffffff" />
+          </label>
+        </div>
+        <div class="rev-grid">
+          <label class="has-help">
+            <span class="label-row"><span data-i18n="rev.maxResults">每轮结果</span><button type="button" class="help-btn" data-help="rev.maxResults" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="rev.maxResults"><p data-i18n="help.rev.maxResults"></p></div>
+            <input id="rev_max_results" type="number" value="50" min="1" max="500" />
+          </label>
+          <label class="has-help">
+            <span class="label-row"><span data-i18n="rev.maxScan">每轮扫描</span><button type="button" class="help-btn" data-help="rev.maxScan" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="rev.maxScan"><p data-i18n="help.rev.maxScan"></p></div>
+            <input id="rev_max_scan" type="number" value="5000000" min="1000" step="1000" />
+          </label>
+          <label class="has-help">
+            <span class="label-row"><span data-i18n="rev.workers">线程</span><button type="button" class="help-btn" data-help="rev.workers" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="rev.workers"><p data-i18n="help.rev.workers"></p></div>
+            <input id="rev_workers" type="number" value="4" min="1" max="16" />
+          </label>
+        </div>
+        <p class="section-label" data-i18n="rev.stats">属性</p>
+        <p class="section-hint" data-i18n="help.rev.statsHint"></p>
+        <div class="rev-grid">
+          <label class="has-help">
+            <span class="label-row"><span data-i18n="rev.red">红心</span><button type="button" class="help-btn" data-help="rev.red" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="rev.red"><p data-i18n="help.rev.red"></p><pre class="help-code hidden" data-help-code="rev.red"></pre></div>
+            <input id="rev_red" type="text" />
+          </label>
+          <label class="has-help">
+            <span class="label-row"><span data-i18n="rev.soul">魂心</span><button type="button" class="help-btn" data-help="rev.soul" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="rev.soul"><p data-i18n="help.rev.soul"></p><pre class="help-code hidden" data-help-code="rev.soul"></pre></div>
+            <input id="rev_soul" type="text" />
+          </label>
+          <label class="has-help">
+            <span class="label-row"><span data-i18n="stat.damage">伤害</span><button type="button" class="help-btn" data-help="stat.damage" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="stat.damage"><p data-i18n="help.stat.damage"></p><pre class="help-code hidden" data-help-code="stat.damage"></pre></div>
+            <input id="rev_damage" type="text" />
+          </label>
+          <label class="has-help">
+            <span class="label-row"><span data-i18n="stat.speed">移速</span><button type="button" class="help-btn" data-help="stat.speed" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="stat.speed"><p data-i18n="help.stat.speed"></p><pre class="help-code hidden" data-help-code="stat.speed"></pre></div>
+            <input id="rev_speed" type="text" />
+          </label>
+          <label class="has-help">
+            <span class="label-row"><span data-i18n="stat.tears">射速</span><button type="button" class="help-btn" data-help="stat.tears" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="stat.tears"><p data-i18n="help.stat.tears"></p><pre class="help-code hidden" data-help-code="stat.tears"></pre></div>
+            <input id="rev_tears" type="text" />
+          </label>
+          <label class="has-help">
+            <span class="label-row"><span data-i18n="stat.range">射程</span><button type="button" class="help-btn" data-help="stat.range" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="stat.range"><p data-i18n="help.stat.range"></p><pre class="help-code hidden" data-help-code="stat.range"></pre></div>
+            <input id="rev_range" type="text" />
+          </label>
+          <label class="has-help">
+            <span class="label-row"><span data-i18n="stat.shotSpeed">弹速</span><button type="button" class="help-btn" data-help="stat.shotSpeed" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="stat.shotSpeed"><p data-i18n="help.stat.shotSpeed"></p><pre class="help-code hidden" data-help-code="stat.shotSpeed"></pre></div>
+            <input id="rev_shotSpeed" type="text" />
+          </label>
+          <label class="has-help">
+            <span class="label-row"><span data-i18n="stat.luck">幸运</span><button type="button" class="help-btn" data-help="stat.luck" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="stat.luck"><p data-i18n="help.stat.luck"></p><pre class="help-code hidden" data-help-code="stat.luck"></pre></div>
+            <input id="rev_luck" type="text" />
+          </label>
+        </div>
+        <div class="section-head has-help">
+          <p class="section-label label-row"><span data-i18n="rev.pocket">口袋</span><button type="button" class="help-btn" data-help="rev.pocket" aria-expanded="false">?</button></p>
+          <div class="help-pop hidden" data-help-pop="rev.pocket"><p data-i18n="help.rev.pocket"></p></div>
+        </div>
+        <div class="pocket-radios" id="pocketRadios">
+          <label class="pocket-radio"><input type="radio" name="pocket_kind" value="" checked /><span data-i18n="pocket.any">不限</span></label>
+          <label class="pocket-radio"><input type="radio" name="pocket_kind" value="trinket" /><span data-i18n="pocket.trinket">饰品</span></label>
+          <label class="pocket-radio"><input type="radio" name="pocket_kind" value="card" /><span data-i18n="pocket.card">卡牌</span></label>
+          <label class="pocket-radio"><input type="radio" name="pocket_kind" value="pill" /><span data-i18n="pocket.pill">胶囊</span></label>
+          <label class="pocket-radio"><input type="radio" name="pocket_kind" value="none" /><span data-i18n="pocket.none">无</span></label>
+        </div>
+        <div id="pocketFields" class="pocket-fields hidden">
+          <label id="fieldTrinket" class="hidden has-help">
+            <span class="label-row"><span data-i18n="pocket.trinketId">饰品 id</span><button type="button" class="help-btn" data-help="pocket.trinketId" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="pocket.trinketId"><p data-i18n="help.pocket.trinketId"></p><pre class="help-code hidden" data-help-code="pocket.trinketId"></pre></div>
+            <input id="rev_trinket_id" type="text" />
+          </label>
+          <label id="fieldPocket" class="hidden has-help">
+            <span class="label-row"><span class="pf-lbl" data-i18n="pocket.pocketId">口袋 id</span><button type="button" class="help-btn pf-help" data-help="pocket.cardId" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden pf-pop" data-help-pop="pocket.cardId"><p class="pf-note" data-i18n="help.pocket.cardId"></p><pre class="help-code hidden pf-code" data-help-code="pocket.cardId"></pre></div>
+            <input id="rev_pocket_id" type="text" />
+          </label>
+        </div>
+        <p class="section-label" data-i18n="rev.items">道具</p>
+        <div class="rev-grid">
+          <label class="has-help">
+            <span class="label-row"><span data-i18n="rev.passive">被动 id</span><button type="button" class="help-btn" data-help="rev.passive" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="rev.passive"><p data-i18n="help.rev.passive"></p><pre class="help-code hidden" data-help-code="rev.passive"></pre></div>
+            <input id="rev_active_id" type="text" />
+          </label>
+          <label class="has-help">
+            <span class="label-row"><span data-i18n="rev.active">主动 id</span><button type="button" class="help-btn" data-help="rev.active" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="rev.active"><p data-i18n="help.rev.active"></p><pre class="help-code hidden" data-help-code="rev.active"></pre></div>
+            <input id="rev_passive_id" type="text" />
+          </label>
+          <label class="chk has-help">
+            <input id="rev_ach_159" type="checkbox" />
+            <span class="label-row"><span data-i18n="cal.ach159">ach 159</span><button type="button" class="help-btn" data-help="cal.ach159" aria-expanded="false">?</button></span>
+            <div class="help-pop hidden" data-help-pop="cal.ach159"><p data-i18n="help.cal.ach159"></p></div>
+          </label>
+        </div>
+        <div class="rev-actions">
+          <button type="submit" id="btnReverse" class="btn-reverse" data-i18n="rev.startScan">开始</button>
+          <button type="button" id="btnReverseContinue" class="btn-reverse-continue hidden" data-i18n="rev.continue">继续</button>
+        </div>
+      </form>
+
+      <div id="reverseWorkspace" class="reverse-workspace hidden">
+        <div class="rev-work-col">
+          <div id="reverseProgress" class="reverse-progress">
+            <div class="rev-progress-head">
+              <span id="revPhase" data-i18n="rev.idle">待命</span>
+              <button type="button" id="btnReverseStop" class="btn-stop" data-i18n="rev.stop">停止</button>
+            </div>
+            <div class="rev-bar"><div id="revBarFill" class="rev-bar-fill"></div></div>
+            <p id="revStats" class="rev-stats"></p>
+            <pre id="revLog" class="rev-log"></pre>
+          </div>
+          <div class="results-panel">
+            <div class="results-head">
+              <span data-i18n="rev.hits">结果</span>
+              <span id="resultsMeta" class="panel-meta">n = 0</span>
+            </div>
+            <div id="seedList" class="seed-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="err" class="err hidden"></div>
+    <div id="out" class="hidden"></div>
+
+    <details class="history-drawer" id="historyDrawer">
+      <summary class="history-drawer-summary" data-i18n="history.title">历史</summary>
+      <div class="history-panel history-drawer-panel">
+        <div class="history-head">
+          <span data-i18n="history.title">历史</span>
+          <button type="button" id="btnClearHistory" class="btn-clear" data-i18n="history.clear">清空</button>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </div>
+    </details>
+  </div>
+  <script src="/static/i18n.js"></script>
+  <script src="/static/field-help.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

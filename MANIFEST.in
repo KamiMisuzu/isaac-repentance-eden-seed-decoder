@@ -1,0 +1,5 @@
+include README.md
+include itempools.xml
+include predict_eden.py
+recursive-include web *.html
+recursive-include web/static *

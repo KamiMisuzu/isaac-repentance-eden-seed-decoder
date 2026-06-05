@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "isaac-repentance-eden-seed-decoder"
+version = "1.0.0"
+description = "Repentance v1.9.1.17 Eden seed decoder: predict stats, pocket, and starting items; reverse search."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [{ name = "KamiMisuzu" }]
+keywords = ["isaac", "repentance", "eden", "seed", "rng"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: End Users/Desktop",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: Microsoft :: Windows",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Games/Entertainment",
+]
+dependencies = []
+
+[project.optional-dependencies]
+fast = ["numpy>=1.24", "numba>=0.58"]
+
+[project.scripts]
+eden-seed-decoder = "predict_eden:main"
+
+[project.urls]
+Homepage = "https://github.com/KamiMisuzu/isaac-repentance-eden-seed-decoder"
+Repository = "https://github.com/KamiMisuzu/isaac-repentance-eden-seed-decoder"
+
+[tool.setuptools]
+py-modules = ["predict_eden"]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["tools*", "web*"]
+
+[tool.setuptools.package-data]
+web = ["index.html", "static/*"]
