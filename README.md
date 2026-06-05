@@ -11,9 +11,21 @@
 
 ## 安装
 
+需要 **Python 3.10+**。
+
 ```bash
 git clone https://github.com/KamiMisuzu/isaac-repentance-eden-seed-decoder.git
 cd isaac-repentance-eden-seed-decoder
+
+# 建议：创建并激活虚拟环境
+python -m venv .venv
+# Windows
+.venv\Scripts\activate
+# Linux / macOS
+# source .venv/bin/activate
+
+# 先升级 pip / setuptools（旧版 pip 在 pip install -e . 时可能报错 No module named pip）
+python -m pip install --upgrade pip setuptools wheel
 
 # 基础功能（查种子、反推单线程）
 pip install -e .
